@@ -17,29 +17,11 @@ let api = axios.create({
     withCredentials: true
 })
 
-let image = axios.create({
-    baseURL: 'http://www.splashbase.co/api/v1/images/random',
-    timeout: 2000,
-    withCredentials: true
-})
-
-let quote = axios.create({
-    baseURL: 'https://night-class-server.herokuapp.com/api/quotes',
-    timeout: 2000,
-    withCredentials: true
-})
-
-let weather = axios.create({
-    baseURL: 'https://night-class-server.herokuapp.com/api/',
-    timeout: 2000,
-    withCredentials: true
-})
-
 var store = new vuex.Store({
     state: {
         user: {},
         todo: [],
-        image: [],
+        image: {url: ''},
         quote: [],
         weather: [],
     },
@@ -114,13 +96,51 @@ var store = new vuex.Store({
         },
 
         //todo actions
-
+        getTodo({ commit, dispatch }) {
+            api.get('todos',).then(res => {
+                console.log(res)
+                commit('setTodo', res.data.data)
+            })
+                .catch(err => {
+                    console.error(err)
+                })
+        },
+        addTodo({commit, dispatch}, todo) {
+            api.post('todos', todo)
+            .then(res => {
+                console.log(res.data.message)
+                dispatch('getTodo')
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        },
+        removeTodo({commit, dispatch}, todoId){
+            api.delete('todos/' +todoId)
+            .then(res => {
+                console.log(res)
+                dispatch('getTodo')
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        },
+        updateTodo({commit, dispatch}, todo){
+            api.put(todo._id, todo)
+            .then(res => {
+                console.log(res)
+                dispatch('getTodo')
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        },
 
         //image actions
-        getImage({ commit, dispatch }, image) {
-            image.get('large_url').then(res => {
+        getImage({ commit, dispatch }) {
+            api.get('images').then(res => {
                 console.log(res)
-                commit('setImage', res.data.data)
+                commit('setImage', res.data)
             })
                 .catch(err => {
                     console.error(err)
@@ -128,10 +148,10 @@ var store = new vuex.Store({
         },
 
         //quote actions
-        getQuote({ commit, dispatch }, quote) {
-            quote.get('quote').then(res => {
+        getQuote({ commit, dispatch }) {
+            api.get('quotes').then(res => {
                 console.log(res)
-                commit('setQuote', res.data.data)
+                commit('setQuote', res.data)
             })
                 .catch(err => {
                     console.error(err)
@@ -140,9 +160,9 @@ var store = new vuex.Store({
 
         //weather actions
         getWeather({ commit, dispatch }) {
-            weather.get('weather').then(res => {
+            api.get('weather').then(res => {
                 console.log(res)
-                commit('setWeather', res.data.data)
+                commit('setWeather', res.data)
             })
                 .catch(err => {
                     console.error(err)

@@ -1,8 +1,10 @@
 <template>
-    <div class="weather">
-        <div class="container">
-            <h3>Weather</h3>
-        </div>
+           
+    <div class="weather" v-if="weather.main">
+        <h3 class="text-light">Weather</h3>
+        <p>{{weather.main.temp}}° Kelvin</p>
+        <p>{{weather.main.humidity}}% Humidity</p>
+        <p>{{weather.wind.speed}} Wind Speed</p>
     </div>
 </template>
 
@@ -11,19 +13,19 @@
         name: 'weather',
         data() {
             return {
-                weather: "",
+
             }
         },
         mounted() {
             this.$store.dispatch('getWeather')
         },
         methods: {
-        
+
         },
         computed: {
-            // getWeather() {
-            //     return this.$store.state.weather
-            // }
+            weather() {
+                return this.$store.state.weather
+            }
         }
     }
 </script>
