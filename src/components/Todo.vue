@@ -1,57 +1,67 @@
 <template>
     <div class="todo">
-        <div class="container text-light">
-            <h4 class="text-light">New Honey Do</h4>
-            <form @submit.prevent="addTodo">
-                <div class="form-group">
-                    <label for="todoName">Honey Do...</label>
-                    <input class="form-control" type="text" id="todoName" v-model="todo.name" placeholder="Trash Cans">
+        <div class="container">
+            <div class="card" style="width: 60rem;">
+                <div class="card-header">
+                    New Honey Do
                 </div>
-                <div class="form-group">
-                    <label for="todoDesc">..And this is how To-Do</label>
-                    <input class="form-control" type="text" id="todoDesc" v-model="todo.description" placeholder="Take them to the curb, and bring them back in on Friday">
+                <div class="card-body">
+                    <form @submit.prevent="addTodo">
+                        <div class="form-group">
+                            <label for="todoName">Honey Do...</label>
+                            <input class="form-control" type="text" id="todoName" v-model="todo.name" placeholder="Trash Cans">
+                        </div>
+                        <div class="form-group">
+                            <label for="todoDesc">..And this is how To-Do</label>
+                            <input class="form-control" type="text" id="todoDesc" v-model="todo.description" placeholder="Take them to the curb, and bring them back in on Friday">
+                        </div>
+                        <fieldset class="form-group">
+                            <legend>Have you Done it yet?</legend>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="compRadio1" value="true"> Yes
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="optionsRadios" id="compRadio2" value="false" checked> No
+                                </label>
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-default" type="submit">Add this To-Do</button>
+                        </div>
+                    </form>
+
+                    <table class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Completed</th>
+                                    <th>Update/Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody v-for="todo in todos">
+                                <tr>
+                                    <th>{{todo.name}}</th>
+                                    <th>{{todo.description}}</th>
+                                    <th>{{todo.completed}}</th>
+                                    <th>
+                                        <button type="button" data-toggle="modal" :data-target="'#'+ todo._id" class="btn btn-default" @click="setTodo(todo)">U</button> /
+                                        <button class="btn btn-warning" @click="removeTodo(todo._id)">X</button>
+                                    </th>
+                                </tr>
+                            </tbody>
+                        </table>
                 </div>
-                <fieldset class="form-group text-light">
-                    <legend>Have you Done it yet?</legend>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optionsRadios" id="compRadio1" value="true" > Yes
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="optionsRadios" id="compRadio2" value="false" checked> No
-                        </label>
-                    </div>
-                </fieldset>
-                <div class="form-group">
-                    <button class="btn btn-default" type="submit">Add this To-Do</button>
-                </div>
-            </form>
+            </div>
+
+
         </div>
 
         <div class="container text-light">
-            <table class="table table-bordered">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Completed</th>
-                        <th>Update/Delete</th>
-                    </tr>
-                </thead>
-                <tbody v-for="todo in todos">
-                    <tr>
-                        <th>{{todo.name}}</th>
-                        <th>{{todo.description}}</th>
-                        <th>{{todo.completed}}</th>
-                        <th>
-                            <button type="button" data-toggle="modal" :data-target="'#'+ todo._id" class="btn btn-default" @click="setTodo(todo)">U</button> /
-                            <button class="btn btn-warning" @click="removeTodo(todo._id)">X</button>
-                        </th>
-                    </tr>
-                </tbody>
-            </table>
+            
         </div>
 
         <div class="modal fade" :id="todo._id" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true"
@@ -100,7 +110,7 @@
                 todo: {
 
                 },
-                updatetodo: {
+                updatedTodo: {
 
                 }
             }
@@ -111,7 +121,7 @@
         },
         methods: {
             setTodo(todo) {
-                this.updateTodo = todo
+                this.updatedTodo = todo
             },
             addTodo() {
                 this.$store.dispatch('addTodo', this.todo)
@@ -121,7 +131,7 @@
                 this.$store.dispatch('removeTodo', id)
             },
             updateTodo() {
-                this.$store.dispatch('updateTodo', this.updateTodo)
+                this.$store.dispatch('updateTodo', this.updatedTodo)
             }
         },
         computed: {

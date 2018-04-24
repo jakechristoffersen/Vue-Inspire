@@ -126,7 +126,7 @@ var store = new vuex.Store({
             });
         },
         updateTodo({commit, dispatch}, todo){
-            api.put(todo._id, todo)
+            api.put('todos/'+todo._id, todo)
             .then(res => {
                 console.log(res)
                 dispatch('getTodo')
