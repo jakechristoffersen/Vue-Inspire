@@ -6,13 +6,13 @@ import router from "../router"
 vue.use(vuex)
 
 let auth = axios.create({
-    baseURL: '//night-class-server.herokuapp.com/auth',
+    baseURL: '',
     timeout: 2000,
     withCredentials: true
 })
 
 let api = axios.create({
-    baseURL: '//night-class-server.herokuapp.com/api',
+    baseURL: '',
     timeout: 5000,
     withCredentials: true
 })
